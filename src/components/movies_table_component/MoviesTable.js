@@ -11,7 +11,9 @@ const newMovieState = {
     score: '',
     comment: '',
     notes: '',
-    watchedDate: ''
+    movieType: 0,
+    movieStatus: 0,
+    watchedAt: ''
 };
 
 class MoviesTable extends Component {
@@ -22,7 +24,7 @@ class MoviesTable extends Component {
             moviesList: [],
             isLoading: true,
             showModal: false,
-            buttonIds: new Set(),
+            buttonIds: new Map(),
             error: ''
         };
 
@@ -51,22 +53,28 @@ class MoviesTable extends Component {
     }
 
     updateField(e, field) {
-        const val = e.target.value;
+        let value = e.target.value;
+        if (field === 'movieType' || field === 'movieStatus') {
+            value = Number(value);
+        }
+
         this.setState(prevState => ({
-            movieState: { ...prevState.movieState, [field]: val }
+            movieState: { ...prevState.movieState, [field]: value }
         }));
     }
 
-    isButtonClicked(buttonId, action = 'delete') {
-        if (action === 'add') {
-            this.setState(prevState => ({ buttonIds: new Set(prevState.buttonIds).add(buttonId) }));
-        } else if (action === 'delete') {
-            this.setState(prevState => {
-                const newButtonIds = new Set(prevState.buttonIds);
+    isButtonClicked(buttonId, button) {
+        this.setState(prevState => {
+            const newButtonIds = new Map(prevState.buttonIds);
+
+            if (newButtonIds.has(buttonId)) {
                 newButtonIds.delete(buttonId);
-                return ({ buttonIds: newButtonIds });
-            });
-        }
+            } else {
+                newButtonIds.set(buttonId, button);
+            }
+            return ({ buttonIds: newButtonIds });
+        });
+
     }
 
     openModal(data = {}) {
@@ -82,13 +90,13 @@ class MoviesTable extends Component {
     }
 
     saveMovie(data = {}) {
-        this.isButtonClicked(data.id, 'add');
+        this.isButtonClicked(data.id, 'save');
         if (data.id === 'new') {
             postMovie(data).then(res => {
-                this.isButtonClicked(data.id);
+                this.isButtonClicked(data.id, 'save');
 
                 if (res.ok) {
-                    this.setState(() => ({ moviesList: res.movies, isLoading: false, error: '' }), this.closeModal)
+                    this.setState(() => ({ moviesList: res.movies, isLoading: false, error: '' }))
                 } else {
                     const { message } = res.error || {};
                     this.setState(() => ({ error: message, isLoading: false }));
@@ -96,10 +104,10 @@ class MoviesTable extends Component {
             });
         } else {
             updateMovie(data).then(res => {
-                this.isButtonClicked(data.id);
+                this.isButtonClicked(data.id, 'save');
 
                 if (res.ok) {
-                    this.setState(() => ({ moviesList: res.movies, isLoading: false, error: '' }), this.closeModal)
+                    this.setState(() => ({ moviesList: res.movies, isLoading: false, error: '' }))
                 } else {
                     const { message } = res.error || {};
                     this.setState(() => ({ error: message, isLoading: false }));
@@ -110,10 +118,11 @@ class MoviesTable extends Component {
 
     removeMovie(movie) {
         if (window.confirm(`Are you sure you want to delete ${movie.name} from the list ?`)) {
-            this.isButtonClicked(movie.id, 'add');
+            this.isButtonClicked(movie.id, 'delete');
 
             deleteMovie(movie.id).then(res => {
-                this.isButtonClicked(movie.id);
+                this.isButtonClicked(movie.id, 'delete');
+
                 if (res.ok) {
                     this.setState(() => ({ moviesList: res.movies, isLoading: false, error: '' }));
                 } else {
@@ -154,8 +163,8 @@ class MoviesTable extends Component {
                                         <th scope="col">Name</th>
                                         <th scope="col" width="5%">Score</th>
                                         <th scope="col">Comment</th>
-                                        <th scope="col">Watched (date)</th>
-                                        <th scope="col">Notes</th>
+                                        <th scope="col">Date watched</th>
+                                        <th scope="col">Watch notes</th>
                                         <th scope="col" width="15%">Actions</th>
                                     </tr>
                                 </thead>
