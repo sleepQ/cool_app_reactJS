@@ -248,3 +248,29 @@ img.default-user {
   max-width: 350px;
   max-height: 80px !important;
 }
+
+.input-disabled {
+  background: inherit;
+  border: 0;
+  color: white;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1050;
+  display: block;
+  overflow: hidden;
+  outline: 0;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.txtarea-resize {
+  overflow:auto;
+  resize:none;
+}

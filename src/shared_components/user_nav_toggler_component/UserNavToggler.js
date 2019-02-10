@@ -39,14 +39,14 @@ class UserNavToggler extends Component {
         const { showUserOptions } = this.state;
         const { logOut, history, user = {} } = this.props;
 
-        const userProfile = (<div className="nav-link">Profile</div>);
-        const userMovies = (<div className="nav-link">Movies</div>);
-        const userLogout = (<div className="nav-link">Logout</div>);
+        const userProfile = (<div className="text-white p-2">Profile</div>);
+        const userMovies = (<div className="text-white p-2">Movies</div>);
+        const userLogout = (<div className="text-white p-2">Logout</div>);
 
         return (
             <ul className="navbar-nav ml-auto" ref={this.userOptionsRef}>
-                <li className="nav-item">
-                    <button className="nav-link navbar-brand d-flex w-180p border-0" onClick={this.toggleUserNav}>
+                <li className="">
+                    <button className="navbar-brand d-flex w-180p border-0 pl-2 bg-secondary" onClick={this.toggleUserNav}>
                         <img className="default-user" src={defaultUser} alt="User" />
                         <span className="text-white ml-2">{navUserName(user.username)}</span>
                     </button>

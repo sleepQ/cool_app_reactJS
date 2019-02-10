@@ -40,7 +40,6 @@ class Navbar extends Component {
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
                 <button
                     className="navbar-toggler"
-                    type="button"
                     data-toggle="collapse"
                     data-target="#navbar1"
                     aria-controls="navbar1"

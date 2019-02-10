@@ -47,7 +47,7 @@ class Register extends Component {
         });
     }
 
-    render () {
+    render() {
         const { username, email, password, showPass, error } = this.state;
 
         return (

@@ -13,7 +13,6 @@ export const register = newUser => {
         method: 'POST',
         headers: new Headers({ 'Content-Type': 'application/json' }),
         body: JSON.stringify(data),
-        // credentials: 'same-origin'
     };
 
     return fetch(url, options)
@@ -26,4 +25,4 @@ export const register = newUser => {
         )
         .then(res => ({ ok: true, res }))
         .catch(error => ({ ok: false, error }));
-}
+};
