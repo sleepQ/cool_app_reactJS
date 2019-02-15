@@ -11,6 +11,7 @@ class Register extends Component {
             email: '',
             password: '',
             showPass: false,
+            clickedRegister: false,
             error: '',
         };
 
@@ -30,6 +31,7 @@ class Register extends Component {
 
     onSubmit(e) {
         e.preventDefault();
+        this.setState(() => ({ clickedRegister: true }));
 
         const user = {
             username: this.state.username,
@@ -39,16 +41,17 @@ class Register extends Component {
 
         register(user).then(res => {
             if (res.ok) {
+                this.setState(() => ({ error: '', clickedRegister: false }));
                 this.props.history.push(urlTo('login'));
             } else {
                 const { message } = res.error || {};
-                this.setState(() => ({ error: message }));
+                this.setState(() => ({ error: message, clickedRegister: false }));
             }
         });
     }
 
     render() {
-        const { username, email, password, showPass, error } = this.state;
+        const { username, email, password, showPass, error, clickedRegister } = this.state;
 
         return (
             <div className="container">
@@ -103,8 +106,8 @@ class Register extends Component {
 
                             <ErrorMessage error={error} />
 
-                            <button type="submit" className="btn btn-lg btn-primary btn-block">
-                                Register
+                            <button disabled={clickedRegister} type="submit" className="btn btn-lg btn-primary btn-block">
+                                Register {clickedRegister && <span className="spinner-border spinner-border-sm" aria-hidden="true" />}
                             </button>
                         </form>
                     </div>

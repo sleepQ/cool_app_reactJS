@@ -9,6 +9,7 @@ class Login extends Component {
         this.state = {
             email: '',
             password: '',
+            clickedLogin: false,
             error: ''
         };
 
@@ -23,6 +24,8 @@ class Login extends Component {
 
     onSubmit (e) {
         e.preventDefault();
+        this.setState(() => ({ clickedLogin: true }));
+
         const user = {
             email: this.state.email,
             password: this.state.password
@@ -30,16 +33,17 @@ class Login extends Component {
 
         login(user).then(res => {
             if (res.ok) {
+                this.setState(() => ({ error: '', clickedLogin: false }));
                 this.props.history.push(urlTo('profile'));
             } else {
                 const { message } = res.error || {};
-                this.setState(() => ({ error: message }));
+                this.setState(() => ({ error: message, clickedLogin: false }));
             }
         })
     }
 
     render () {
-        const { email, password, error } = this.state;
+        const { email, password, error, clickedLogin } = this.state;
 
         return (
             <div className="container">
@@ -72,8 +76,8 @@ class Login extends Component {
 
                             <ErrorMessage error={error} />
 
-                            <button type="submit" className="btn btn-lg btn-primary btn-block">
-                                Sign in
+                            <button disabled={clickedLogin} type="submit" className="btn btn-lg btn-primary btn-block">
+                                Sign in {clickedLogin && <span className="spinner-border spinner-border-sm" aria-hidden="true" />}
                             </button>
                         </form>
                     </div>
