@@ -27,14 +27,15 @@ export const getMovies = () => {
 
 export const postMovie = (movie) => {
     const url = `${apiUrl}movies`;
-//movie.watchedAt
+
     const data = {
         name: movie.name,
         comment: movie.comment,
         notes: movie.notes,
-        score: Number(movie.score),
+        score: movie.score,
         movieType: movie.movieType,
-        movieStatus: movie.movieStatus
+        movieStatus: movie.movieStatus,
+        watchedAt: movie.watchedAt,
     };
 
     const options = {
@@ -60,14 +61,15 @@ export const postMovie = (movie) => {
 
 export const updateMovie = (movie) => {
     const url = `${apiUrl}movies/${movie.id}`;
-//movie.watchedAt
+
     const data = {
         name: movie.name,
         comment: movie.comment,
         notes: movie.notes,
-        score: Number(movie.score),
+        score: movie.score,
         movieType: movie.movieType,
-        movieStatus: movie.movieStatus
+        movieStatus: movie.movieStatus,
+        watchedAt: movie.watchedAt,
     };
 
     const options = {

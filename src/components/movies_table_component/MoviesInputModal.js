@@ -1,5 +1,8 @@
-import React, { Fragment } from 'react';
+import React from 'react';
+import NumericInput from 'react-numeric-input';
+import DatePicker from '../../shared_components/date_picker_component/DatePicker';
 import { movieTypes, movieStatuses } from '../../utils/helper_variables';
+import { validBeforeToday } from '../../utils/helper_functions';
 
 class MoviesInputModal extends React.Component {
 
@@ -15,8 +18,8 @@ class MoviesInputModal extends React.Component {
         const showButtonSpinner = buttonIds.get(id) === 'save';
 
         return (
-            <div className="modal fade show" tabIndex="-1" role="dialog">
-                <div className="modal-dialog modal-dialog-centered" role="document">
+            <div className="modal" tabIndex="-1" role="dialog">
+                <div className="modal-dialog" role="document">
                     <div className="modal-content">
                         <div className="modal-header">
                             <h5 className="modal-title">Movie / TV-show</h5>
@@ -26,56 +29,79 @@ class MoviesInputModal extends React.Component {
                         </div>
 
                         <div className="modal-body">
-
-                            <div className="form-group">
+                            <div className="form-group d-flex justify-content-between">
+                                <label className="col-form-label">TV type:</label>
                                 <div className="form-check form-check-inline">
-                                    <input id="Movie" className="form-check-input" type="radio" value={0} checked={movieType === 0} onChange={e => updateField(e, 'movieType')} />
+                                    <input disabled={disableButton} id="Movie" className="form-check-input" type="radio" value={0} checked={movieType === 0} onChange={e => updateField(e, 'movieType')} />
                                     <label htmlFor="Movie" className="form-check-label">{movieTypes[0]}</label>
                                 </div>
 
                                 <div className="form-check form-check-inline">
-                                    <input id="TV-show" className="form-check-input" type="radio" value={1} checked={movieType === 1} onChange={e => updateField(e, 'movieType')} />
+                                    <input disabled={disableButton} id="TV-show" className="form-check-input" type="radio" value={1} checked={movieType === 1} onChange={e => updateField(e, 'movieType')} />
                                     <label htmlFor="TV-show" className="form-check-label">{movieTypes[1]}</label>
                                 </div>
                             </div>
 
-                            <div className="form-group">
+                            <div className="form-group d-flex justify-content-between">
+                                <label className="col-form-label">TV status:</label>
                                 <div className="form-check form-check-inline">
-                                    <input id="To-Watch" className="form-check-input" type="radio" value={0} checked={movieStatus === 0} onChange={e => updateField(e, 'movieStatus')} />
+                                    <input disabled={disableButton} id="To-Watch" className="form-check-input" type="radio" value={0} checked={movieStatus === 0} onChange={e => updateField(e, 'movieStatus')} />
                                     <label htmlFor="To-Watch" className="form-check-label">{movieStatuses[0]}</label>
                                 </div>
 
                                 <div className="form-check form-check-inline">
-                                    <input id="Watched" className="form-check-input" type="radio" value={1} checked={movieStatus === 1} onChange={e => updateField(e, 'movieStatus')} />
+                                    <input disabled={disableButton} id="Watched" className="form-check-input" type="radio" value={1} checked={movieStatus === 1} onChange={e => updateField(e, 'movieStatus')} />
                                     <label htmlFor="Watched" className="form-check-label">{movieStatuses[1]}</label>
                                 </div>
                             </div>
 
                             <div className="form-group">
                                 <label htmlFor="name" className="col-form-label">Name:</label>
-                                <input id="name" type="text" className="form-control" value={name} onChange={e => updateField(e, 'name')} />
+                                <input disabled={disableButton} id="name" type="text" className="form-control" value={name} onChange={e => updateField(e, 'name')} />
                             </div>
 
-                            {watched && <Fragment>
-                                <div className="form-group">
-                                    <label htmlFor="score" className="col-form-label">Score:</label>
-                                    <input id="score" type="number" className="form-control" value={score} onChange={e => updateField(e, 'score')} />
+                            <div className={`${watched ? 'visible' : 'hidden'}`}>
+                                <div className="form-group row">
+                                    <div className="col-4">
+                                        <label htmlFor="score" className="col-form-label">Score:</label>
+                                        <NumericInput
+                                            id="score"
+                                            className="form-control"
+                                            strict
+                                            disabled={disableButton}
+                                            min={1}
+                                            max={10}
+                                            step={0.5}
+                                            precision={1}
+                                            value={score}
+                                            onChange={e => updateField(e, 'score')}
+                                        />
+                                    </div>
+
+                                    <div className="col-6">
+                                        <DatePicker
+                                            inputProps={{ placeholder: 'YYYY-MM-DD' }}
+                                            labelClassName="col-form-label"
+                                            label="Watched:"
+                                            value={watchedAt}
+                                            viewMode="years"
+                                            dateFormat="YYYY-MM-DD"
+                                            onChange={e => updateField(e, 'watchedAt')}
+                                            isValidDate={validBeforeToday}
+                                        />
+                                    </div>
+
                                 </div>
 
                                 <div className="form-group">
                                     <label htmlFor="comment" className="col-form-label">Comment:</label>
-                                    <textarea id="comment" type="text" className="form-control txtarea-resize" value={comment} onChange={e => updateField(e, 'comment')} />
+                                    <textarea disabled={disableButton} id="comment" type="text" className="form-control txtarea-resize" value={comment} onChange={e => updateField(e, 'comment')} />
                                 </div>
-
-                                <div className="form-group">
-                                    <label htmlFor="watchedAt" className="col-form-label">Watched (date):</label>
-                                    <input id="watchedAt" type="text" className="form-control" value={watchedAt} onChange={e => updateField(e, 'watchedAt')} />
-                                </div>
-                            </Fragment>}
+                            </div>
 
                             <div className="form-group">
                                 <label htmlFor="notes" className="col-form-label">Notes:</label>
-                                <textarea id="notes" type="text" className="form-control txtarea-resize" value={notes} onChange={e => updateField(e, 'notes')} />
+                                <textarea disabled={disableButton} id="notes" type="text" className="form-control txtarea-resize" value={notes} onChange={e => updateField(e, 'notes')} />
                             </div>
                         </div>
 
@@ -89,7 +115,7 @@ class MoviesInputModal extends React.Component {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div >
         )
     }
 }

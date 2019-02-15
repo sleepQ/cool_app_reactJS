@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
+import moment from 'moment';
 import Spinner from '../../shared_components/Spinner';
 import ErrorMessage from '../../shared_components/ErrorMessage';
 import MovieRows from './MovieRows';
 import MoviesInputModal from './MoviesInputModal';
+import { movieStatuses } from '../../utils/helper_variables';
 import { getMovies, postMovie, updateMovie, deleteMovie } from './movies_endpoints';
 
 const newMovieState = {
     id: 'new',
     name: '',
-    score: '',
+    score: '5',
     comment: '',
     notes: '',
     movieType: 0,
@@ -53,7 +55,16 @@ class MoviesTable extends Component {
     }
 
     updateField(e, field) {
-        let value = e.target.value;
+        let value;
+
+        if (field === 'score') {
+            value = e;
+        } else if (field === 'watchedAt') {
+            value = moment(e).format('YYYY-MM-DD');
+        } else {
+            value = e.target.value;
+        }
+
         if (field === 'movieType' || field === 'movieStatus') {
             value = Number(value);
         }
@@ -91,6 +102,13 @@ class MoviesTable extends Component {
 
     saveMovie(data = {}) {
         this.isButtonClicked(data.id, 'save');
+
+        if (movieStatuses[data.movieStatus] === 'To-Watch') {
+            data.score = null;
+            data.comment = null;
+            data.watchedAt = null;
+        }
+
         if (data.id === 'new') {
             postMovie(data).then(res => {
                 this.isButtonClicked(data.id, 'save');
@@ -139,7 +157,7 @@ class MoviesTable extends Component {
 
         return (
             <div className="container">
-                <div>
+                <div className="jumbotron">
                     <h1 className="text-center">Movies / TV-Shows</h1>
                     <br />
                     <ErrorMessage error={error} />
@@ -156,16 +174,16 @@ class MoviesTable extends Component {
                         ? (<div className="text-center"><Spinner /></div>)
                         : (<div>
                             <button className="btn btn-primary mb-2" onClick={() => this.openModal(newMovieState)}>Add Movie</button>
-                            <table className="table table-striped table-dark table-bordered table-responsive-sm table-hover">
+                            <table className="table table-striped table-dark table-bordered table-responsive-sm movieTable">
                                 <thead>
                                     <tr className="text-center">
-                                        <th scope="col" width="5%">#</th>
-                                        <th scope="col">Name</th>
-                                        <th scope="col" width="5%">Score</th>
-                                        <th scope="col">Comment</th>
-                                        <th scope="col">Date watched</th>
-                                        <th scope="col">Watch notes</th>
-                                        <th scope="col" width="15%">Actions</th>
+                                        <th className="px-1 overflow-auto" width="5%">#</th>
+                                        <th className="px-1 overflow-auto" width="14%">Name</th>
+                                        <th className="px-1 overflow-auto" width="7%">Score</th>
+                                        <th className="px-1 overflow-auto" width="25%">Comment</th>
+                                        <th className="px-1 overflow-auto" width="11%">Date watched</th>
+                                        <th className="px-1 overflow-auto" width="25%">Watch notes</th>
+                                        <th className="px-1 overflow-auto" width="13%">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
