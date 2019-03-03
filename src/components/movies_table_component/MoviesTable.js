@@ -29,6 +29,7 @@ class MoviesTable extends Component {
             buttonIds: new Map(),
             error: ''
         };
+        this.controller = new AbortController();
 
         this.fetchMovies = this.fetchMovies.bind(this);
         this.openModal = this.openModal.bind(this);
@@ -40,15 +41,23 @@ class MoviesTable extends Component {
     }
 
     componentDidMount() {
+        this.mounted = true;
         this.fetchMovies();
     }
 
+    componentWillUnmount() {
+        this.mounted = false;
+        this.controller.abort();
+    }
+
     fetchMovies() {
-        getMovies().then(res => {
+        getMovies(this.controller.signal).then(res => {
             if (res.ok) {
                 this.setState(() => ({ moviesList: res.movies, isLoading: false, error: '' }))
             } else {
-                const { message } = res.error || {};
+                const { message, name } = res.error || {};
+                if (name === 'AbortError') return;
+
                 this.setState(() => ({ error: message, isLoading: false }));
             }
         });
@@ -111,24 +120,28 @@ class MoviesTable extends Component {
 
         if (data.id === 'new') {
             postMovie(data).then(res => {
-                this.isButtonClicked(data.id, 'save');
+                if (this.mounted) {
+                    this.isButtonClicked(data.id, 'save');
 
-                if (res.ok) {
-                    this.setState(() => ({ moviesList: res.movies, isLoading: false, error: '' }))
-                } else {
-                    const { message } = res.error || {};
-                    this.setState(() => ({ error: message, isLoading: false }));
+                    if (res.ok) {
+                        this.setState(() => ({ moviesList: res.movies, isLoading: false, error: '' }))
+                    } else {
+                        const { message } = res.error || {};
+                        this.setState(() => ({ error: message, isLoading: false }));
+                    }
                 }
             });
         } else {
             updateMovie(data).then(res => {
-                this.isButtonClicked(data.id, 'save');
+                if (this.mounted) {
+                    this.isButtonClicked(data.id, 'save');
 
-                if (res.ok) {
-                    this.setState(() => ({ moviesList: res.movies, isLoading: false, error: '' }))
-                } else {
-                    const { message } = res.error || {};
-                    this.setState(() => ({ error: message, isLoading: false }));
+                    if (res.ok) {
+                        this.setState(() => ({ moviesList: res.movies, isLoading: false, error: '' }))
+                    } else {
+                        const { message } = res.error || {};
+                        this.setState(() => ({ error: message, isLoading: false }));
+                    }
                 }
             });
         }
@@ -139,13 +152,15 @@ class MoviesTable extends Component {
             this.isButtonClicked(movie.id, 'delete');
 
             deleteMovie(movie.id).then(res => {
-                this.isButtonClicked(movie.id, 'delete');
+                if (this.mounted) {
+                    this.isButtonClicked(movie.id, 'delete');
 
-                if (res.ok) {
-                    this.setState(() => ({ moviesList: res.movies, isLoading: false, error: '' }));
-                } else {
-                    const { message } = res.error || {};
-                    this.setState(() => ({ error: message, isLoading: false }));
+                    if (res.ok) {
+                        this.setState(() => ({ moviesList: res.movies, isLoading: false, error: '' }));
+                    } else {
+                        const { message } = res.error || {};
+                        this.setState(() => ({ error: message, isLoading: false }));
+                    }
                 }
             });
         }

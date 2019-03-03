@@ -12,16 +12,12 @@ export function isUserLoggedIn() {
     } catch(e) {
         return ({
             id: '',
-            username: '',
-            email: '',
             isLoggedIn: false
         });
     }
 
     return ({
         id: decoded.id,
-        username: decoded.username,
-        email: decoded.email,
         isLoggedIn: true
     });
 }
@@ -29,10 +25,10 @@ export function isUserLoggedIn() {
 
 export const PrivateRoute = ({ component: Component, ...rest }) => (
     <Route {...rest} render={(props) => {
-        const user = isUserLoggedIn();
+        const { isLoggedIn } = isUserLoggedIn();
 
-        if (user.isLoggedIn) {
-            return <Component user={user} {...props} />;
+        if (isLoggedIn) {
+            return <Component {...props} {...rest} />;
         }
 
         return <Redirect to={urlTo('login')} />;
@@ -41,12 +37,12 @@ export const PrivateRoute = ({ component: Component, ...rest }) => (
 
 export const AuthRoute = ({ component: Component, ...rest }) => (
     <Route {...rest} render={(props) => {
-        const user = isUserLoggedIn();
+        const { isLoggedIn } = isUserLoggedIn();
 
-        if (user.isLoggedIn) {
+        if (isLoggedIn) {
             return <Redirect to="/" />;
         }
 
-        return <Component {...props} />;
+        return <Component {...props} {...rest} />;
     }} />
 );

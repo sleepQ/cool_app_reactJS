@@ -1,11 +1,12 @@
 import { apiUrl } from '../../utils/helper_variables';
 
 
-export const getMovies = () => {
+export const getMovies = (signal) => {
     const url = `${apiUrl}movies`;
 
     const options = {
         method: 'GET',
+        signal,
         headers: new Headers({
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${localStorage.usertoken}`

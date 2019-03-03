@@ -5,6 +5,25 @@ import { movieTypes, movieStatuses } from '../../utils/helper_variables';
 import { validBeforeToday } from '../../utils/helper_functions';
 
 class MoviesInputModal extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.escFunction = this.escFunction.bind(this);
+    }
+
+    escFunction(event) {
+        if (event.keyCode === 27) {
+            this.props.closeModal();
+        }
+    }
+
+    componentDidMount() {
+        document.addEventListener("keydown", this.escFunction, false);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener("keydown", this.escFunction, false);
+    }
 
     render() {
         const { movieState, saveMovie, closeModal, updateField, buttonIds } = this.props;

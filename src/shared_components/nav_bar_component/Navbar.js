@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import { urlTo } from '../../utils/helper_functions';
 import UserNavToggler from '../user_nav_toggler_component/UserNavToggler';
-import { isUserLoggedIn } from '../RouteUtil';
 
 class Navbar extends Component {
     constructor(props) {
@@ -11,13 +10,19 @@ class Navbar extends Component {
         this.logOut = this.logOut.bind(this);
     }
 
-    logOut(e) {
-        // e.preventDefault();
-        localStorage.removeItem('usertoken');
-        this.props.history.push('/');
+    logOut() {
+        try {
+            localStorage.removeItem('usertoken');
+        } catch (error) {
+            console.log(error);
+        }
+
+        this.props.setUser({});
+        this.props.history.push(urlTo('login'));
     }
 
     render() {
+        const { user, history } = this.props;
 
         const loginRegLink = (
             <ul className="navbar-nav ml-auto">
@@ -33,8 +38,6 @@ class Navbar extends Component {
                 </li>
             </ul>
         );
-
-        const user = isUserLoggedIn();
 
         return (
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -58,7 +61,7 @@ class Navbar extends Component {
                     </ul>
 
                     {user.isLoggedIn
-                        ? <UserNavToggler user={user} logOut={this.logOut} {...this.props} />
+                        ? <UserNavToggler user={user} logOut={this.logOut} history={history} />
                         : loginRegLink
                     }
 

@@ -66,7 +66,12 @@ class UserNavToggler extends Component {
                                 this.toggleUserNav();
                             }}>{userMovies}</button>
 
-                        <button className="dropdown-item nav-hover" onClick={logOut}>{userLogout}</button>
+                        <button
+                            className="dropdown-item nav-hover"
+                            onClick={() => {
+                                logOut();
+                                this.toggleUserNav();
+                            }}>{userLogout}</button>
                     </div>}
                 </li>
             </ul>

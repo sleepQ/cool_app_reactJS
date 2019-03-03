@@ -32,4 +32,4 @@ const MovieRows = ({ movie, index, openModal, removeMovie, buttonIds }) => {
     );
 };
 
-export default MovieRows;
+export default React.memo(MovieRows);

@@ -9,8 +9,7 @@ export const login = user => {
     const options = {
         method: 'POST',
         headers: new Headers({ 'Content-Type': 'application/json' }),
-        body: JSON.stringify(data),
-        // credentials: 'same-origin'
+        body: JSON.stringify(data)
     };
 
     return fetch(url, options)
@@ -24,7 +23,12 @@ export const login = user => {
         .then(res => {
             const { token } = res || {};
             if (token && typeof token === 'string') {
-                localStorage.setItem('usertoken', token);
+                try {
+                    localStorage.setItem('usertoken', token);
+                } catch (error) {
+                    return ({ ok: false, error });
+                }
+
                 return ({ ok: true, token });
             }
         })

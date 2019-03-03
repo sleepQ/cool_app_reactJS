@@ -17,12 +17,12 @@ class Login extends Component {
         this.onSubmit = this.onSubmit.bind(this);
     }
 
-    onChange (e) {
+    onChange(e) {
         const { name, value } = e.target;
         this.setState({ [name]: value });
     }
 
-    onSubmit (e) {
+    onSubmit(e) {
         e.preventDefault();
         this.setState(() => ({ clickedLogin: true }));
 
@@ -33,8 +33,7 @@ class Login extends Component {
 
         login(user).then(res => {
             if (res.ok) {
-                this.setState(() => ({ error: '', clickedLogin: false }));
-                this.props.history.push(urlTo('profile'));
+                this.props.getUser();
             } else {
                 const { message } = res.error || {};
                 this.setState(() => ({ error: message, clickedLogin: false }));
@@ -42,7 +41,7 @@ class Login extends Component {
         })
     }
 
-    render () {
+    render() {
         const { email, password, error, clickedLogin } = this.state;
 
         return (
@@ -54,7 +53,9 @@ class Login extends Component {
 
                             <div className="form-group">
                                 <label htmlFor="email">Email Address</label>
-                                <input type="email"
+                                <input
+                                    disabled={clickedLogin}
+                                    type="email"
                                     className="form-control"
                                     name="email"
                                     placeholder="Enter Email"
@@ -65,7 +66,9 @@ class Login extends Component {
 
                             <div className="form-group">
                                 <label htmlFor="password">Password</label>
-                                <input type="password"
+                                <input
+                                    disabled={clickedLogin}
+                                    type="password"
                                     className="form-control"
                                     name="password"
                                     placeholder="Enter Password"
