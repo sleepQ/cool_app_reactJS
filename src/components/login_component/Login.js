@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { login } from './login_endpoints';
-import { urlTo } from '../../utils/helper_functions';
 import ErrorMessage from '../../shared_components/ErrorMessage';
 
 class Login extends Component {
@@ -12,9 +11,14 @@ class Login extends Component {
             clickedLogin: false,
             error: ''
         };
+        this.controller = new AbortController();
 
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+    }
+
+    componentWillUnmount() {
+        this.controller.abort();
     }
 
     onChange(e) {
@@ -31,11 +35,12 @@ class Login extends Component {
             password: this.state.password
         }
 
-        login(user).then(res => {
+        login(user, this.controller.signal).then(res => {
             if (res.ok) {
                 this.props.getUser();
             } else {
-                const { message } = res.error || {};
+                const { message, name } = res.error || {};
+                if (name === 'AbortError') return;
                 this.setState(() => ({ error: message, clickedLogin: false }));
             }
         })

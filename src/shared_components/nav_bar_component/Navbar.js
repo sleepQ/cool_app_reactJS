@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
-import { urlTo } from '../../utils/helper_functions';
+import { urlTo, isUserLoggedIn } from '../../utils/helper_functions';
 import UserNavToggler from '../user_nav_toggler_component/UserNavToggler';
 
 class Navbar extends Component {
@@ -23,6 +23,7 @@ class Navbar extends Component {
 
     render() {
         const { user, history } = this.props;
+        const { isLoggedIn } = isUserLoggedIn();
 
         const loginRegLink = (
             <ul className="navbar-nav ml-auto">
@@ -60,7 +61,7 @@ class Navbar extends Component {
                         </li>
                     </ul>
 
-                    {user.isLoggedIn
+                    {isLoggedIn
                         ? <UserNavToggler user={user} logOut={this.logOut} history={history} />
                         : loginRegLink
                     }

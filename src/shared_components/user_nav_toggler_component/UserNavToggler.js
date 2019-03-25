@@ -38,6 +38,7 @@ class UserNavToggler extends Component {
     render() {
         const { showUserOptions } = this.state;
         const { logOut, history, user = {} } = this.props;
+        const userImg = user.imageUrl || defaultUser;
 
         const userProfile = (<div className="text-white p-2">Profile</div>);
         const userMovies = (<div className="text-white p-2">Movies</div>);
@@ -47,7 +48,14 @@ class UserNavToggler extends Component {
             <ul className="navbar-nav ml-auto" ref={this.userOptionsRef}>
                 <li className="">
                     <button className="navbar-brand d-flex w-180p border-0 pl-2 bg-secondary" onClick={this.toggleUserNav}>
-                        <img className="default-user" src={defaultUser} alt="User" />
+                        <img
+                            className="default-user"
+                            src={userImg}
+                            onError={e => {
+                                e.target.onerror = null;
+                                e.target.src = defaultUser;
+                            }}
+                        />
                         <span className="text-white ml-2">{navUserName(user.username)}</span>
                     </button>
 

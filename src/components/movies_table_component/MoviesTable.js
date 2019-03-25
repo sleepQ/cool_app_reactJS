@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import moment from 'moment';
-import Spinner from '../../shared_components/Spinner';
 import ErrorMessage from '../../shared_components/ErrorMessage';
 import MovieRows from './MovieRows';
 import MoviesInputModal from './MoviesInputModal';
@@ -186,7 +185,7 @@ class MoviesTable extends Component {
                     />}
 
                     {isLoading
-                        ? (<div className="text-center"><Spinner /></div>)
+                        ? (<div className="text-center"><div className="spinner-border" /></div>)
                         : (<div>
                             <button className="btn btn-primary mb-2" onClick={() => this.openModal(newMovieState)}>Add Movie</button>
                             <table className="table table-striped table-dark table-bordered table-responsive-sm movieTable">

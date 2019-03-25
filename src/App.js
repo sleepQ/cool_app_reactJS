@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { isUserLoggedIn } from './utils/helper_functions';
 import { fetchUser } from './app_user_endpoints';
 
-import { PrivateRoute, AuthRoute, isUserLoggedIn } from './shared_components/RouteUtil';
+import { PrivateRoute, AuthRoute } from './shared_components/RouteUtil';
 
 import NotFound from './shared_components/NotFound';
 import Navbar from './shared_components/nav_bar_component/Navbar';
@@ -41,7 +42,6 @@ class App extends Component {
       if (res.ok) {
         this.setUser({ ...res.user, isLoggedIn: !!res.user });
       } else {
-
         try {
           localStorage.removeItem('usertoken');
         } catch (error) {
@@ -49,7 +49,7 @@ class App extends Component {
         }
         console.log("USER FETCH ERROR");
       }
-    })
+    });
   }
 
   render() {
@@ -65,7 +65,7 @@ class App extends Component {
               <AuthRoute exact path="/login" user={user} getUser={this.getUser} component={Login} />
 
               <Route exact path="/" component={Home} />
-              <PrivateRoute exact path="/profile" user={user} component={Profile} />
+              <PrivateRoute exact path="/profile" user={user} setUser={this.setUser} component={Profile} />
               <PrivateRoute exact path="/movies" component={MoviesTable} />
 
               <Route component={NotFound} />

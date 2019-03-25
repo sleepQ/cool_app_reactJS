@@ -1,6 +1,6 @@
 import { apiUrl } from '../../utils/helper_variables';
 
-export const login = user => {
+export const login = (user, signal) => {
     const url = `${apiUrl}users/login`;
     const data = {
         email: user.email,
@@ -8,6 +8,7 @@ export const login = user => {
     };
     const options = {
         method: 'POST',
+        signal,
         headers: new Headers({ 'Content-Type': 'application/json' }),
         body: JSON.stringify(data)
     };
