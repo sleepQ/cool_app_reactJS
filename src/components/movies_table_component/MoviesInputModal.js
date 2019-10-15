@@ -42,7 +42,7 @@ class MoviesInputModal extends React.Component {
                     <div className="modal-content">
                         <div className="modal-header">
                             <h5 className="modal-title">Movie / TV-show</h5>
-                            <button className="close" onClick={closeModal}>
+                            <button type="button" className="close" onClick={closeModal}>
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
@@ -125,10 +125,10 @@ class MoviesInputModal extends React.Component {
                         </div>
 
                         <div className="modal-footer">
-                            <button className="btn btn-lg btn-secondary" onClick={closeModal}>
+                            <button type="button" className="btn btn-lg btn-secondary" onClick={closeModal}>
                                 Close
                             </button>
-                            <button disabled={disableButton} className="btn btn-lg btn-primary" onClick={() => saveMovie(movieState)}>
+                            <button type="button" disabled={disableButton} className="btn btn-lg btn-primary" onClick={() => saveMovie(movieState)}>
                                 Save {showButtonSpinner && <span className="spinner-border spinner-border-sm" aria-hidden="true" />}
                             </button>
                         </div>

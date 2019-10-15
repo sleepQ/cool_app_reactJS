@@ -97,8 +97,8 @@ class Register extends Component {
                                     />
                                     <span className="input-group-text btn" name="showPass" onClick={this.showPassword}>
                                         {showPass
-                                            ? <i className="eye-slash" />
-                                            : <i className="eye" />
+                                            ? <i className="fa fa-eye-slash" />
+                                            : <i className="fa fa-eye" />
                                         }
                                     </span>
                                 </div>

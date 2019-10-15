@@ -23,3 +23,26 @@ export const uploadUserImage = (data, signal) => {
         .then(user => ({ ok: true, user }))
         .catch(error => ({ ok: false, error }));
 };
+
+export const fetchStranger = (username) => {
+    const url = `${apiUrl}users/${username}`;
+
+    const options = {
+        method: 'GET',
+        headers: new Headers({
+            'Authorization': `Bearer ${localStorage.usertoken}`
+        })
+    };
+
+    return fetch(url, options)
+        .then(res => res.ok
+            ? res.json()
+            : Promise.reject({
+                statusCode: res.status,
+                message: res.statusText,
+            })
+        )
+        .then(stranger => ({ ok: true, stranger }))
+        .catch(error => ({ ok: false, error }));
+
+};

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import socketIo from 'socket.io-client';
 import { isUserLoggedIn } from './utils/helper_functions';
 import { fetchUser } from './app_user_endpoints';
 
@@ -14,6 +15,7 @@ import Login from './components/login_component/Login';
 import Register from './components/register_component/Register';
 import Profile from './components/profile_component/Profile';
 import MoviesTable from './components/movies_table_component/MoviesTable';
+import PrivateMessage from './shared_components/private_message_component/PrivateMessage';
 
 class App extends Component {
   constructor(props) {
@@ -21,6 +23,8 @@ class App extends Component {
     this.state = {
       user: {}
     };
+
+    this.socket = socketIo('http://localhost:5000');
 
     this.getUser = this.getUser.bind(this);
     this.setUser = this.setUser.bind(this);
@@ -40,38 +44,41 @@ class App extends Component {
   getUser() {
     fetchUser().then(res => {
       if (res.ok) {
-        this.setUser({ ...res.user, isLoggedIn: !!res.user });
+        this.setUser({ ...res.user });
       } else {
+        this.setUser({});
         try {
           localStorage.removeItem('usertoken');
         } catch (error) {
           console.log(error);
         }
-        console.log("USER FETCH ERROR");
       }
     });
   }
 
   render() {
-    const { user } = this.state;
+    const { user = {} } = this.state;
 
     return (
       <BrowserRouter>
         <div>
-          <Navbar user={user} setUser={this.setUser} />
+          <Navbar user={user} setUser={this.setUser} socket={this.socket} />
           <div className="container">
             <Switch>
               <AuthRoute exact path="/register" component={Register} />
               <AuthRoute exact path="/login" user={user} getUser={this.getUser} component={Login} />
 
               <Route exact path="/" component={Home} />
-              <PrivateRoute exact path="/profile" user={user} setUser={this.setUser} component={Profile} />
+              <PrivateRoute exact path="/users/:username" user={user} setUser={this.setUser} component={Profile} />
               <PrivateRoute exact path="/movies" component={MoviesTable} />
 
               <Route component={NotFound} />
             </Switch>
           </div>
           { /* <Footer /> */}
+
+          {user.email && <PrivateMessage socket={this.socket} />}
+
         </div>
       </BrowserRouter>
     );

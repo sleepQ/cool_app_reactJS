@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { urlTo, navUserName } from '../../utils/helper_functions';
+import { urlTo, shortenUsername } from '../../utils/helper_functions';
 import defaultUser from '../../css/images/default-user.svg';
 
 class UserNavToggler extends Component {
@@ -40,46 +40,61 @@ class UserNavToggler extends Component {
         const { logOut, history, user = {} } = this.props;
         const userImg = user.imageUrl || defaultUser;
 
-        const userProfile = (<div className="text-white p-2">Profile</div>);
-        const userMovies = (<div className="text-white p-2">Movies</div>);
-        const userLogout = (<div className="text-white p-2">Logout</div>);
+        const userIcon = showUserOptions ? <i className="fa fa-angle-up" /> : <i className="fa fa-angle-down" />;
 
         return (
             <ul className="navbar-nav ml-auto" ref={this.userOptionsRef}>
-                <li className="">
-                    <button className="navbar-brand d-flex w-180p border-0 pl-2 bg-secondary" onClick={this.toggleUserNav}>
+                <li>
+                    <button type="button" className="navbar-brand d-flex w-200 border-0 bg-secondary cursor-pointer" onClick={this.toggleUserNav}>
                         <img
                             className="default-user"
                             src={userImg}
+                            alt=""
                             onError={e => {
                                 e.target.onerror = null;
                                 e.target.src = defaultUser;
                             }}
                         />
-                        <span className="text-white ml-2">{navUserName(user.username)}</span>
+                        <span className="text-white ml-2">{shortenUsername(user.username)}</span>
+                        <span className="ml-auto">{userIcon}</span>
                     </button>
 
-                    {showUserOptions && <div className="user-dropdown-menu">
+                    {showUserOptions && <div className="user-dropdown-menu bg-secondary">
                         <button
-                            className="dropdown-item nav-hover"
+                            type="button"
+                            className="dropdown-item nav-hover py-3"
                             onClick={() => {
-                                history.push(urlTo('profile'));
+                                history.push(urlTo('users', { username: user.username }));
                                 this.toggleUserNav();
-                            }}>{userProfile}</button>
+                            }}
+                        >
+                            <span className="ml-auto"><i className="fa fa-address-book-o" /></span>
+                            <span className="text-white px-2">Profile</span>
+                        </button>
 
                         <button
-                            className="dropdown-item nav-hover"
+                            type="button"
+                            className="dropdown-item nav-hover py-3"
                             onClick={() => {
                                 history.push(urlTo('movies'));
                                 this.toggleUserNav();
-                            }}>{userMovies}</button>
+                            }}
+                        >
+                            <span className="ml-auto"><i className="fa fa-film" /></span>
+                            <span className="text-white px-2">Movies</span>
+                        </button>
 
                         <button
-                            className="dropdown-item nav-hover"
+                            type="button"
+                            className="dropdown-item nav-hover py-3"
                             onClick={() => {
                                 logOut();
                                 this.toggleUserNav();
-                            }}>{userLogout}</button>
+                            }}
+                        >
+                            <span className="ml-auto"><i className="fa fa-sign-out" /></span>
+                            <span className="text-white px-2">Logout</span>
+                        </button>
                     </div>}
                 </li>
             </ul>

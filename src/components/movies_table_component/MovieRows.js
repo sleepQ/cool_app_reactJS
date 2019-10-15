@@ -21,10 +21,10 @@ const MovieRows = ({ movie, index, openModal, removeMovie, buttonIds }) => {
             <td className="overflow-hidden">{notes}</td>
 
             <td className="px-0 py-3 overflow-hidden">
-                <button disabled={disableButton} className="btn btn-sm btn-primary px-2 mr-3" onClick={() => openModal(movie)}>
+                <button type="button" disabled={disableButton} className="btn btn-sm btn-primary px-2 mr-3" onClick={() => openModal(movie)}>
                     Edit
                 </button>
-                <button disabled={disableButton} className="btn btn-sm btn-secondary px-2" onClick={() => removeMovie(movie)}>
+                <button type="button" disabled={disableButton} className="btn btn-sm btn-secondary px-2" onClick={() => removeMovie(movie)}>
                     Delete {showButtonSpinner && <span className="spinner-border spinner-border-sm" aria-hidden="true" />}
                 </button>
             </td>

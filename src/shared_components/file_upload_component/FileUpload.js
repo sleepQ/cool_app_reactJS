@@ -1,5 +1,6 @@
 import React from 'react';
 import { invalidFileExtension, invalidFileSize, composeAttachment } from '../../utils/helper_functions';
+import ErrorMessage from '../../shared_components/ErrorMessage';
 
 class FileUpload extends React.Component {
   constructor(props) {
@@ -70,9 +71,7 @@ class FileUpload extends React.Component {
 
         </div>
 
-        <div className={error ? 'alert alert-danger' : 'hide-alert'}>
-          <div>{error}</div>
-        </div>
+        <ErrorMessage error={error} />
 
       </div>
     )

@@ -5,14 +5,14 @@ export const urlTo = (url, payload = {}) => {
     const routes = {
         login: '/login',
         register: '/register',
-        profile: '/profile',
+        users: `/users/${payload.username}`,
         movies: '/movies'
     }
 
     return routes[url] || '/';
 };
 
-export function navUserName(username = '') {
+export function shortenUsername(username = '') {
     if (typeof username === 'string') {
         const len = username.length;
         if (len > 8) {
@@ -47,12 +47,14 @@ export function isUserLoggedIn() {
     } catch (e) {
         return ({
             id: '',
+            username: '',
             isLoggedIn: false
         });
     }
 
     return ({
         id: decoded.id,
+        username: decoded.username,
         isLoggedIn: true
     });
 }

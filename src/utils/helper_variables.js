@@ -11,3 +11,9 @@ export const movieStatuses = [
     'To-Watch',
     'Watched'
 ];
+
+export const socketEvent = {
+    ONLINE: 'ONLINE',
+    PRIVATE_MESSAGE: 'PRIVATE_MESSAGE',
+    DISCONNECT: 'DISCONNECT',
+};

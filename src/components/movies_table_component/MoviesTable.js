@@ -187,7 +187,7 @@ class MoviesTable extends Component {
                     {isLoading
                         ? (<div className="text-center"><div className="spinner-border" /></div>)
                         : (<div>
-                            <button className="btn btn-primary mb-2" onClick={() => this.openModal(newMovieState)}>Add Movie</button>
+                            <button type="button" className="btn btn-primary mb-2" onClick={() => this.openModal(newMovieState)}>Add Movie</button>
                             <table className="table table-striped table-dark table-bordered table-responsive-sm movieTable">
                                 <thead>
                                     <tr className="text-center">

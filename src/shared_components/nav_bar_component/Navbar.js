@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import { urlTo, isUserLoggedIn } from '../../utils/helper_functions';
 import UserNavToggler from '../user_nav_toggler_component/UserNavToggler';
+import { socketEvent } from '../../utils/helper_variables';
 
 class Navbar extends Component {
     constructor(props) {
@@ -11,14 +12,17 @@ class Navbar extends Component {
     }
 
     logOut() {
+        const { user, setUser, history, socket } = this.props;
+
         try {
             localStorage.removeItem('usertoken');
         } catch (error) {
             console.log(error);
         }
 
-        this.props.setUser({});
-        this.props.history.push(urlTo('login'));
+        socket.emit(socketEvent.DISCONNECT, user.username);
+        setUser({});
+        history.push(urlTo('login'));
     }
 
     render() {
@@ -43,6 +47,7 @@ class Navbar extends Component {
         return (
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
                 <button
+                    type="button"
                     className="navbar-toggler"
                     data-toggle="collapse"
                     data-target="#navbar1"
