@@ -38,7 +38,7 @@ class MoviesInputModal extends React.Component {
 
         return (
             <div className="modal" tabIndex="-1" role="dialog">
-                <div className="modal-dialog" role="document">
+                <div className="modal-dialog modal-dialog-centered" role="document">
                     <div className="modal-content">
                         <div className="modal-header">
                             <h5 className="modal-title">Movie / TV-show</h5>

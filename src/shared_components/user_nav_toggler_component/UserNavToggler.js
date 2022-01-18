@@ -59,7 +59,7 @@ class UserNavToggler extends Component {
                         <span className="ml-auto">{userIcon}</span>
                     </button>
 
-                    {showUserOptions && <div className="user-dropdown-menu bg-secondary">
+                    {showUserOptions && <div className="user-dropdown-menu bg-secondary w-200">
                         <button
                             type="button"
                             className="dropdown-item nav-hover py-3"

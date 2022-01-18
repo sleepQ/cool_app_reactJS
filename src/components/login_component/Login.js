@@ -40,7 +40,10 @@ class Login extends Component {
                 this.props.getUser();
             } else {
                 const { message, name } = res.error || {};
-                if (name === 'AbortError') return;
+
+                if (name === 'AbortError')
+                    return;
+
                 this.setState(() => ({ error: message, clickedLogin: false }));
             }
         })

@@ -9,7 +9,6 @@ class PrivateMessage extends React.Component {
         this.state = {
             userMessages: {},
             allOnlineUsers: [],
-            chatBoxes: [],
             showChat: false,
         };
 
@@ -19,8 +18,6 @@ class PrivateMessage extends React.Component {
         // this.keyPress = this.keyPress.bind(this);
         // this.sendMessage = this.sendMessage.bind(this);
         // this.scrollToBottom = this.scrollToBottom.bind(this);
-        this.openChatBox = this.openChatBox.bind(this);
-        this.closeChatBox = this.closeChatBox.bind(this);
         this.toggleChat = this.toggleChat.bind(this);
     }
 
@@ -63,33 +60,13 @@ class PrivateMessage extends React.Component {
         // });
     }
 
-    openChatBox(e, user) {
-        e.stopPropagation();
-        const { chatBoxes } = this.state;
-
-        if (chatBoxes.length > 2 || chatBoxes.indexOf(user) !== -1) return;
-
-        this.setState(prevState => ({
-            chatBoxes: prevState.chatBoxes.concat(user)
-        }));
-    }
-
-    closeChatBox(e) {
-        e.stopPropagation();
-        const { value } = e.currentTarget;
-
-        this.setState(prevState => ({
-            chatBoxes: prevState.chatBoxes.filter(user => user !== value)
-        }));
-    }
-
     toggleChat() {
         this.setState(prevState => ({ showChat: !prevState.showChat }));
     }
 
     render() {
-        const { allOnlineUsers = [], chatBoxes, userMessages, showChat } = this.state;
-        const { socket } = this.props;
+        const { allOnlineUsers = [], userMessages, showChat } = this.state;
+        const { socket, chatBoxes, openChatBox, closeChatBox } = this.props;
         const { username } = isUserLoggedIn();
 
         const chatIcon = showChat ? <i className="fa fa-angle-down" /> : <i className="fa fa-angle-up" />;
@@ -114,7 +91,7 @@ class PrivateMessage extends React.Component {
                                     }
                                     return (
                                         <li key={user} className="chat-list-item">
-                                            <div onClick={e => this.openChatBox(e, user)}>
+                                            <div onClick={e => openChatBox(e, user)}>
                                                 <div className="text-white pl-2">
                                                     {user}
                                                 </div>
@@ -133,7 +110,7 @@ class PrivateMessage extends React.Component {
                             stranger={stranger}
                             socket={socket}
                             userMessages={userMessages[stranger] || []}
-                            closeChatBox={this.closeChatBox}
+                            closeChatBox={closeChatBox}
                         />)
                     )}
                 </div>

@@ -21,13 +21,16 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: {}
+      user: {},
+      chatBoxes: []
     };
 
     this.socket = socketIo('http://localhost:5000');
 
     this.getUser = this.getUser.bind(this);
     this.setUser = this.setUser.bind(this);
+    this.openChatBox = this.openChatBox.bind(this);
+    this.closeChatBox = this.closeChatBox.bind(this);
   }
 
   componentDidMount() {
@@ -56,20 +59,41 @@ class App extends Component {
     });
   }
 
+  openChatBox(e, username) {
+    e.stopPropagation();
+    const { chatBoxes } = this.state;
+
+    if (chatBoxes.length > 2 || chatBoxes.indexOf(username) !== -1)
+      return;
+
+    this.setState(prevState => ({
+      chatBoxes: prevState.chatBoxes.concat(username)
+    }));
+  }
+
+  closeChatBox(e) {
+    e.stopPropagation();
+    const { value } = e.currentTarget;
+
+    this.setState(prevState => ({
+      chatBoxes: prevState.chatBoxes.filter(username => username !== value)
+    }));
+  }
+
   render() {
-    const { user = {} } = this.state;
+    const { user = {}, chatBoxes } = this.state;
 
     return (
       <BrowserRouter>
         <div>
           <Navbar user={user} setUser={this.setUser} socket={this.socket} />
-          <div className="container">
+          <div>
             <Switch>
               <AuthRoute exact path="/register" component={Register} />
               <AuthRoute exact path="/login" user={user} getUser={this.getUser} component={Login} />
 
               <Route exact path="/" component={Home} />
-              <PrivateRoute exact path="/users/:username" user={user} setUser={this.setUser} component={Profile} />
+              <PrivateRoute exact path="/users/:username" user={user} setUser={this.setUser} component={Profile} openChatBox={this.openChatBox} />
               <PrivateRoute exact path="/movies" component={MoviesTable} />
 
               <Route component={NotFound} />
@@ -77,7 +101,7 @@ class App extends Component {
           </div>
           { /* <Footer /> */}
 
-          {user.email && <PrivateMessage socket={this.socket} />}
+          {user.email && <PrivateMessage socket={this.socket} chatBoxes={chatBoxes} openChatBox={this.openChatBox} closeChatBox={this.closeChatBox} />}
 
         </div>
       </BrowserRouter>

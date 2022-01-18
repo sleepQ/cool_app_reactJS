@@ -26,7 +26,8 @@ class ChatBox extends React.Component {
         const { message } = this.state;
         const { socket, username } = this.props;
 
-        if (message.trim().length < 1) return;
+        if (message.trim().length < 1)
+            return;
 
         socket.emit(socketEvent.PRIVATE_MESSAGE, { message, username, stranger });
 
@@ -66,7 +67,7 @@ class ChatBox extends React.Component {
         return (
             <div className="chat-wrapper">
                 <div className="bg-secondary text-white p-2">
-                    {stranger}
+                    <a className="text-white" href={`/users/${stranger}`}>{stranger}</a>
                     <button
                         type="button"
                         className="close"

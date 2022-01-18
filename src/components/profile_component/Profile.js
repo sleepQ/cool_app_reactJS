@@ -39,6 +39,7 @@ class Stranger extends React.Component {
 
     render() {
         const { stranger, error } = this.state;
+        const { openChatBox } = this.props;
         const userImg = stranger.imageUrl || defaultUser;
 
         if (!stranger.username) {
@@ -61,12 +62,11 @@ class Stranger extends React.Component {
                         />
 
                         <div>Username: <span className="text-primary h6">{stranger.username}</span></div>
-                    </div>
 
-                    <div className="row-sm-8 mx-auto">
-                        <button type="button">Message</button>
+                        <div className="mt-2">
+                            <button type="button" className="btn btn-primary" onClick={e => openChatBox(e, stranger.username)}>Message</button>
+                        </div>
                     </div>
-
                 </div>
             </div>
         );
@@ -116,11 +116,11 @@ const MyProfile = ({ user, setUser }) => {
 class Profile extends React.Component {
 
     render() {
-        const { setUser, user } = this.props;
+        const { setUser, user, openChatBox } = this.props;
         const { params } = this.props.match;
 
         if (user.username !== params.username) {
-            return (<Stranger username={params.username} />);
+            return (<Stranger username={params.username} openChatBox={openChatBox} />);
         }
 
         return (<MyProfile setUser={setUser} user={user} />);

@@ -41,7 +41,9 @@ class FileUpload extends React.Component {
           this.setState(() => ({ spinner: false, error: '' }));
         } else {
           const { message, name } = res.error || {};
-          if (name === 'AbortError') return;
+
+          if (name === 'AbortError')
+            return;
 
           this.setState(() => ({ spinner: false, error: message }));
         }

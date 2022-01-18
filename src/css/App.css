@@ -175,7 +175,6 @@ img.default-profile-user {
   visibility: visible;
   opacity: 1;
   height: auto;
-  transition: opacity 0.3s linear, max-height 0.3s linear;
 }
 
 .hidden {
@@ -183,7 +182,6 @@ img.default-profile-user {
   opacity: 0;
   max-height: 0;
   border: none;
-  transition: opacity 0.3s linear, max-height 0.3s linear;
 }
 
 .rdt {

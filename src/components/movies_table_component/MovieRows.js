@@ -16,8 +16,8 @@ const MovieRows = ({ movie, index, openModal, removeMovie, buttonIds }) => {
                 <ScorePieChart score={score} />
             </td>
 
-            <td className="overflow-hidden">{comment}</td>
             <td className="overflow-hidden">{watchedAt}</td>
+            <td className="overflow-hidden">{comment}</td>
             <td className="overflow-hidden">{notes}</td>
 
             <td className="px-0 py-3 overflow-hidden">

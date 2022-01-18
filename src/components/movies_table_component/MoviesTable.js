@@ -26,6 +26,7 @@ class MoviesTable extends Component {
             isLoading: true,
             showModal: false,
             buttonIds: new Map(),
+            sortBy: "",
             error: ''
         };
         this.controller = new AbortController();
@@ -37,6 +38,7 @@ class MoviesTable extends Component {
         this.closeModal = this.closeModal.bind(this);
         this.updateField = this.updateField.bind(this);
         this.isButtonClicked = this.isButtonClicked.bind(this);
+        this.sortMovies = this.sortMovies.bind(this);
     }
 
     componentDidMount() {
@@ -55,7 +57,9 @@ class MoviesTable extends Component {
                 this.setState(() => ({ moviesList: res.movies, isLoading: false, error: '' }))
             } else {
                 const { message, name } = res.error || {};
-                if (name === 'AbortError') return;
+
+                if (name === 'AbortError')
+                    return;
 
                 this.setState(() => ({ error: message, isLoading: false }));
             }
@@ -123,7 +127,8 @@ class MoviesTable extends Component {
                     this.isButtonClicked(data.id, 'save');
 
                     if (res.ok) {
-                        this.setState(() => ({ moviesList: res.movies, isLoading: false, error: '' }))
+                        this.setState(() => ({ moviesList: res.movies, isLoading: false, error: '' }));
+                        this.closeModal();
                     } else {
                         const { message } = res.error || {};
                         this.setState(() => ({ error: message, isLoading: false }));
@@ -136,7 +141,8 @@ class MoviesTable extends Component {
                     this.isButtonClicked(data.id, 'save');
 
                     if (res.ok) {
-                        this.setState(() => ({ moviesList: res.movies, isLoading: false, error: '' }))
+                        this.setState(() => ({ moviesList: res.movies, isLoading: false, error: '' }));
+                        this.closeModal();
                     } else {
                         const { message } = res.error || {};
                         this.setState(() => ({ error: message, isLoading: false }));
@@ -162,6 +168,14 @@ class MoviesTable extends Component {
                     }
                 }
             });
+        }
+    }
+
+    sortMovies(colName) {
+        if (this.state.sortBy === colName) {
+            this.setState((prevState) => ({ moviesList: [...prevState.moviesList].reverse() }));
+        } else {
+            this.setState((prevState) => ({ sortBy: colName, moviesList: [...prevState.moviesList].sort((a, b) => a[colName] > b[colName] ? -1 : 1) }));
         }
     }
 
@@ -192,10 +206,10 @@ class MoviesTable extends Component {
                                 <thead>
                                     <tr className="text-center">
                                         <th className="px-1 overflow-auto" width="5%">#</th>
-                                        <th className="px-1 overflow-auto" width="14%">Name</th>
-                                        <th className="px-1 overflow-auto" width="7%">Score</th>
+                                        <th className="px-1 overflow-auto cursor-pointer" width="14%" onClick={() => this.sortMovies("name")}>Name</th>
+                                        <th className="px-1 overflow-auto cursor-pointer" width="7%" onClick={() => this.sortMovies("score")}>Score</th>
+                                        <th className="px-1 overflow-auto cursor-pointer" width="11%" onClick={() => this.sortMovies("watchedAt")}>Date watched</th>
                                         <th className="px-1 overflow-auto" width="25%">Comment</th>
-                                        <th className="px-1 overflow-auto" width="11%">Date watched</th>
                                         <th className="px-1 overflow-auto" width="25%">Watch notes</th>
                                         <th className="px-1 overflow-auto" width="13%">Actions</th>
                                     </tr>
