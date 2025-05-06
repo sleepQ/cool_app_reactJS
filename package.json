@@ -9,7 +9,7 @@
     "react-datetime": "^2.16.3",
     "react-dom": "^16.8.3",
     "react-numeric-input": "^2.2.3",
-    "react-router-dom": "^4.3.1",
+    "react-router-dom": "^7.5.2",
     "react-scripts": "^2.1.8",
     "socket.io-client": "^2.2.0"
   },
